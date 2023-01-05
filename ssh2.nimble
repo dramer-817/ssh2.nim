@@ -10,4 +10,5 @@ srcDir        = "src"
 
 # Dependencies
 
-requires "nim >= 1.0.6", "libssh2 >= 0.1.4"
+requires "nim >= 1.0.6"
+requires "https://github.com/dramer-817/libssh2.nim#d2bd7e6"

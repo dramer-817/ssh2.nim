@@ -3,7 +3,7 @@ import libssh2, private/[types, utils, session]
 
 export SftpAttributes
 
-proc initSFTPClient*(ssh: SSHClient): SFTPClient =
+proc initSFTPClient*(ssh: SSHClient): Future[SFTPClient] {.async.} =
   ## Init new SCPClient instance from a SSHClient
   result.session = ssh.session
   result.socket = ssh.socket
@@ -11,6 +11,7 @@ proc initSFTPClient*(ssh: SSHClient): SFTPClient =
   while true:
     result.sftp_session = sftp_init(ssh.session)
     if result.sftp_session == nil and ssh.session.session_last_errno() == LIBSSH2_ERROR_EAGAIN:
+      await sleepAsync(1)
       discard ssh.waitsocket()
     else:
       break
